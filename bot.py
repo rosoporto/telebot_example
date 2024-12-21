@@ -3,12 +3,13 @@ import random
 import content
 from dotenv import load_dotenv
 from io import StringIO
-from telebot import TeleBot, types
+from telebot import TeleBot, types, custom_filters
 
 
 load_dotenv()
 tg_api = os.getenv('TG_API')
 bot = TeleBot(tg_api)
+bot.add_custom_filter(custom_filters.TextMatchFilter())
 
 
 @bot.message_handler(commands=["start"])
@@ -126,6 +127,17 @@ def set_file_from_memory(message: types.Message):
         document=file_from_memory,
         caption="Сгенерированный файл с текстом на лету",
         visible_file_name="file_gen.txt"
+    )
+
+
+@bot.message_handler(text=custom_filters.TextFilter(
+    contains=["погода"],
+    ignore_case=True,
+))
+def heandle_weather_request(message: types.Message):
+    bot.send_message(
+        chat_id=message.chat.id,
+        text="Хорошая)",
     )
 
 
