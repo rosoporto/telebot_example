@@ -26,6 +26,16 @@ def handler_command_start(message: types.Message):
     bot.send_message(message.chat.id, joke)
 
 
+@bot.message_handler(commands=["set_photo"])
+def set_photofrom_disk(message: types.Message):
+    photo_file = types.InputFile("pics/2.jpg")
+    bot.send_photo(
+        chat_id=message.chat.id,
+        photo=photo_file,
+        caption="Оцените)"
+    )
+
+
 @bot.message_handler(content_types=["sticker"])
 def handle_sticker(message: types.Message):
     bot.send_sticker(
