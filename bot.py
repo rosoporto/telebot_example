@@ -26,6 +26,43 @@ def handler_command_start(message: types.Message):
     bot.send_message(message.chat.id, joke)
 
 
+@bot.message_handler(content_types=["sticker"])
+def handle_sticker(message: types.Message):
+    bot.send_sticker(
+        chat_id=message.chat.id,
+        sticker=message.sticker.file_id,
+        reply_to_message_id=message.id,
+    )
+
+
+def is_cat_in_caption(message: types.Message):
+    return message.caption and "кот" in message.caption.lower()
+
+
+@bot.message_handler(content_types=["photo"], func=is_cat_in_caption)
+def handle_caption_photo(message: types.Message):    
+    bot.send_message(
+        chat_id=message.chat.id,
+        text="Котики это хорошо!)",
+        reply_to_message_id=message.id
+    )
+    photo_file_id = content.PICS_DOGS
+    bot.send_photo(
+        chat_id=message.chat.id,
+        photo=photo_file_id,
+        caption="Я люблю собачек)"
+    )
+
+
+@bot.message_handler(content_types=["photo"])
+def handle_foto(message: types.Message):
+    bot.send_message(
+        chat_id=message.chat.id,
+        text="👍",
+        reply_to_message_id=message.id
+    )
+
+
 @bot.message_handler()
 def send_hello_message(message: types.Message):
     text = message.text
