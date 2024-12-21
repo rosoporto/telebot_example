@@ -1,2 +1,2 @@
 # Telegram-боты на Python
-### Привмеры кода для взаимодействия с Telegram через pyTelegramBotAPI 
+### Примеры кода для взаимодействия с Telegram через pyTelegramBotAPI 
