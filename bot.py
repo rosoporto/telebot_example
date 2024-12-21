@@ -2,6 +2,7 @@ import os
 import random
 import content
 from dotenv import load_dotenv
+from io import StringIO
 from telebot import TeleBot, types
 
 
@@ -100,6 +101,31 @@ def handle_foto(message: types.Message):
         chat_id=message.chat.id,
         text="👍",
         reply_to_message_id=message.id
+    )
+
+
+@bot.message_handler(commands=["file"])
+def set_file(message: types.Message):
+    file_doc = types.InputFile("contents/text.txt")
+    bot.send_document(
+        chat_id=message.chat.id,
+        document=file_doc,
+        caption="Вот ваш файл с текстом"
+    )
+
+
+@bot.message_handler(commands=["file_gen"])
+def set_file_from_memory(message: types.Message):
+    file = StringIO()
+    file.write("Привет!\n")
+    file.write("Это сгенерированный файл с текстом на лету!\n")
+    file.seek(0) #переведи каретку в начало документа
+    file_from_memory = types.InputFile(file)
+    bot.send_document(
+        chat_id=message.chat.id,
+        document=file_from_memory,
+        caption="Сгенерированный файл с текстом на лету",
+        visible_file_name="file_gen.txt"
     )
 
 
