@@ -27,12 +27,22 @@ def handler_command_start(message: types.Message):
 
 
 @bot.message_handler(commands=["set_photo"])
-def set_photofrom_disk(message: types.Message):
-    photo_file = types.InputFile("pics/2.jpg")
+def set_photo_from_disk(message: types.Message):
+    photo_file = types.InputFile("pics/cat.jpg")
     bot.send_photo(
         chat_id=message.chat.id,
         photo=photo_file,
-        caption="Оцените)"
+        caption="Картинка с диска"
+    )
+
+
+@bot.message_handler(commands=["set_photo_id"])
+def set_photo_id(message: types.Message):
+    photo_file = types.InputFile("pics/cat.jpg")
+    bot.send_photo(
+        chat_id=message.chat.id,
+        photo=content.PICS_CAT_ID,
+        caption="Картинка по ID"
     )
 
 
