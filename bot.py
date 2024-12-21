@@ -10,6 +10,7 @@ load_dotenv()
 tg_api = os.getenv('TG_API')
 bot = TeleBot(tg_api)
 bot.add_custom_filter(custom_filters.TextMatchFilter())
+bot.add_custom_filter(custom_filters.ForwardFilter())
 
 
 @bot.message_handler(commands=["start"])
@@ -129,6 +130,13 @@ def set_file_from_memory(message: types.Message):
         visible_file_name="file_gen.txt"
     )
 
+
+@bot.message_handler(commands=["text"], is_forwarded=True)
+def message_handle_forward_check(message: types.Message):
+    bot.send_message(
+        chat_id=message.chat.id,
+        text=content.DONT_FORWARD_CONTENT,
+    )
 
 @bot.message_handler(text=custom_filters.TextFilter(
     contains=["погода"],
