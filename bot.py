@@ -36,6 +36,26 @@ def set_photo_from_disk(message: types.Message):
     )
 
 
+@bot.message_handler(commands=["set_photo_doc"])
+def set_photo_from_disk_as_doc(message: types.Message):
+    photo_file = types.InputFile("pics/cat.jpg")
+    bot.send_document(
+        chat_id=message.chat.id,
+        document=photo_file,
+        caption="Картинка как документ"
+    )
+
+
+@bot.message_handler(commands=["set_photo_doc_id"])
+def set_photo_from_disk_as_doc_id(message: types.Message):
+    photo_file_id = content.PICS_CAT_ID
+    bot.send_document(
+        chat_id=message.chat.id,
+        document=photo_file_id,
+        caption="Картинка как документ по ссылке"
+    )
+
+
 @bot.message_handler(commands=["set_photo_id"])
 def set_photo_id(message: types.Message):
     photo_file = types.InputFile("pics/cat.jpg")
