@@ -14,6 +14,7 @@ bot.add_custom_filter(custom_filters.TextMatchFilter())
 bot.add_custom_filter(custom_filters.ForwardFilter())
 bot.add_custom_filter(custom_filters.IsReplyFilter())
 bot.add_custom_filter(my_filter.IsUserBotAdmin())
+bot.add_custom_filter(my_filter.ContainsWordFilter())
 
 
 @bot.message_handler(commands=["start"])
@@ -121,7 +122,7 @@ def handle_sticker(message: types.Message):
         reply_to_message_id=message.id,
     )
 
-
+# example using func for filter
 def is_cat_in_caption(message: types.Message):
     return message.caption and "кот" in message.caption.lower()
 
@@ -138,6 +139,22 @@ def handle_caption_photo(message: types.Message):
         chat_id=message.chat.id,
         photo=photo_file_id,
         caption="Я люблю собачек)"
+    )
+
+
+# example using custom filter
+@bot.message_handler(content_types=["photo"], contains_word="собака")
+def handle_caption_photo(message: types.Message):    
+    bot.send_message(
+        chat_id=message.chat.id,
+        text="О, мы про собачек?..",
+        reply_to_message_id=message.id
+    )
+    photo_file_id = content.PICS_DOGS
+    bot.send_photo(
+        chat_id=message.chat.id,
+        photo=photo_file_id,
+        caption="Мне эти нравятся)"
     )
 
 
