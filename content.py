@@ -18,3 +18,10 @@ PICS_DOGS = "https://masterpiecer-images.s3.yandex.net/9586e0deb07711ee8f9e5e02d
 PICS_CAT_ID = "AgACAgIAAxkDAAMvZ2al9YY1M9Rq2gZ3MWoFVLdx6EcAAqXiMRte7DhLC-GesOykAs0BAAMCAANtAAM2BA"
 
 DONT_FORWARD_CONTENT = "Пожалуйста не пересылайте команды. Это может быть опасно!"
+
+content_type_to_ru = {
+    "text": "текст",
+    "photo": "фото",
+    "sticker": "стикер",
+    "document": "документ",
+}

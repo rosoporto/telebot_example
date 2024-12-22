@@ -11,6 +11,7 @@ tg_api = os.getenv('TG_API')
 bot = TeleBot(tg_api)
 bot.add_custom_filter(custom_filters.TextMatchFilter())
 bot.add_custom_filter(custom_filters.ForwardFilter())
+bot.add_custom_filter(custom_filters.IsReplyFilter())
 
 
 @bot.message_handler(commands=["start"])
@@ -27,6 +28,22 @@ def handler_command_start(message: types.Message):
 def handler_command_start(message: types.Message):
     joke = random.choice(content.jokes)
     bot.send_message(message.chat.id, joke)
+
+
+@bot.message_handler(is_reply=True)
+def echo_message_reply(message: types.Message):
+    message_type = message.reply_to_message.content_type
+    content_type_to_ru = content.content_type_to_ru
+    
+    if message_type in content_type_to_ru:
+        message_type = content_type_to_ru[message_type]
+        
+    text = f"Вы ответили на сообщение. Тип: {message_type}"
+    bot.send_message(
+        message.chat.id,
+        text=text,
+        reply_to_message_id=message.reply_to_message.id
+    )
 
 
 @bot.message_handler(commands=["set_photo"])
