@@ -1,6 +1,7 @@
 import os
 import random
 import content
+import my_filter
 from dotenv import load_dotenv
 from io import StringIO
 from telebot import TeleBot, types, custom_filters
@@ -12,6 +13,7 @@ bot = TeleBot(tg_api)
 bot.add_custom_filter(custom_filters.TextMatchFilter())
 bot.add_custom_filter(custom_filters.ForwardFilter())
 bot.add_custom_filter(custom_filters.IsReplyFilter())
+bot.add_custom_filter(my_filter.IsUserBotAdmin())
 
 
 @bot.message_handler(commands=["start"])
@@ -28,6 +30,31 @@ def handler_command_start(message: types.Message):
 def handler_command_start(message: types.Message):
     joke = random.choice(content.jokes)
     bot.send_message(message.chat.id, joke)
+
+
+# add custom filter created by me
+@bot.message_handler(commands=["secret"], is_user_bot_admin=True)
+def handler_secret_request(message: types.Message):    
+    bot.send_message(
+        message.chat.id,
+        text="Секрет для админа"
+    )
+
+
+@bot.message_handler(commands=["secret"], is_user_bot_admin=False)
+def handler_secret_request_not_admin(message: types.Message):    
+    bot.send_message(
+        message.chat.id,
+        text="Доступ закрыт"
+    )
+
+
+@bot.message_handler(commands=["chat_id"])
+def handler_chat_id_request(message: types.Message):    
+    bot.send_message(
+        message.chat.id,
+        text=f"Id чата: {message.chat.id}"
+    )
 
 
 @bot.message_handler(is_reply=True)
