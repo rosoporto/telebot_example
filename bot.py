@@ -30,7 +30,11 @@ def handler_command_start(message: types.Message):
 @bot.message_handler(commands=["joke"])
 def handler_command_start(message: types.Message):
     joke = random.choice(content.jokes)
-    bot.send_message(message.chat.id, joke)
+    joke = formatting.hcite(joke)
+    bot.send_message(
+        message.chat.id,
+        joke,
+        parse_mode="HTML")
 
 
 # add custom filter created by me
@@ -65,10 +69,11 @@ def echo_message_reply(message: types.Message):
     
     if message_type in content_type_to_ru:
         message_type = content_type_to_ru[message_type]
-        
+    
+    # processing messages from other places is mandatory *.escape_*
     text = (
         "Вы <b>ответили</b> на сообщение, "
-        rf"Тип \- {formatting.escape_markdown(message_type)}\."
+        rf"Тип - {formatting.escape_html(message_type)}."
     )
     bot.send_message(
         message.chat.id,
