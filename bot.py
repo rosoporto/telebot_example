@@ -210,17 +210,27 @@ def heandle_weather_request(message: types.Message):
     )
 
 
+# copying message as is (italic, bold, ...)
+@bot.message_handler(contains_word="проверка")
+def copy_incoming_gmessage(message: types.Message):
+    if message.entities:
+        for entity in message.entities:
+            print(entity)
+    bot.copy_message(
+        chat_id=message.chat.id,
+        from_chat_id=message.chat.id,
+        message_id=message.id
+    )
+
+
 @bot.message_handler()
-def send_hello_message(message: types.Message):
-    text = message.text
-    text_lower = text.lower()
-    if "привет" in text_lower:
-        text = "И тебе привет!"
-    elif "как дела" in text_lower:
-        text = "Хорошо! А у вас как?"
-    elif "пока" in text_lower or "до свидания" in text_lower:
-        text = "До новых встреч!"
-    bot.send_message(message.chat.id, text)
+def send_echo_message(message: types.Message):
+    text = message.text    
+    bot.send_message(
+        message.chat.id,
+        text,
+        entities=message.entities
+    )
 
 
 if __name__ == "__main__":
