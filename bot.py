@@ -5,6 +5,7 @@ import my_filter
 from dotenv import load_dotenv
 from io import StringIO
 from telebot import TeleBot, types, custom_filters, formatting
+from get_joke_frop_api import get_joke_single, get_joke_twopart
 
 
 load_dotenv()
@@ -29,8 +30,22 @@ def handler_command_start(message: types.Message):
 
 @bot.message_handler(commands=["joke"])
 def handler_command_start(message: types.Message):
-    joke = random.choice(content.jokes)
+    # joke = random.choice(content.jokes)
+    joke = get_joke_single()
     joke = formatting.hcite(joke)
+    bot.send_message(
+        message.chat.id,
+        joke,
+        parse_mode="HTML")
+
+
+@bot.message_handler(commands=["joke2"])
+def handler_command_start(message: types.Message):    
+    setup, delivery = get_joke_twopart()
+    joke = formatting.format_text(
+        formatting.escape_html(setup),
+        formatting.hspoiler(delivery),
+    )
     bot.send_message(
         message.chat.id,
         joke,
