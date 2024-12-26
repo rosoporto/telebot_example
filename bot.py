@@ -4,7 +4,7 @@ import content
 import my_filter
 from dotenv import load_dotenv
 from io import StringIO
-from telebot import TeleBot, types, custom_filters
+from telebot import TeleBot, types, custom_filters, formatting
 
 
 load_dotenv()
@@ -66,11 +66,15 @@ def echo_message_reply(message: types.Message):
     if message_type in content_type_to_ru:
         message_type = content_type_to_ru[message_type]
         
-    text = f"Вы ответили на сообщение. Тип: {message_type}"
+    text = (
+        "Вы <b>ответили</b> на сообщение, "
+        rf"Тип \- {formatting.escape_markdown(message_type)}\."
+    )
     bot.send_message(
         message.chat.id,
         text=text,
-        reply_to_message_id=message.reply_to_message.id
+        reply_to_message_id=message.reply_to_message.id,
+        parse_mode="HTML", # or MarkdownV2
     )
 
 
@@ -206,7 +210,8 @@ def message_handle_forward_check(message: types.Message):
 def heandle_weather_request(message: types.Message):
     bot.send_message(
         chat_id=message.chat.id,
-        text="Хорошая)",
+        text=formatting.mbold("Хорошая"),
+        parse_mode="MarkdownV2"
     )
 
 
@@ -216,6 +221,15 @@ def set_markdownV2(message: types.Message):
         chat_id=message.chat.id,
         text=content.MarkdownV2,
         parse_mode="MarkdownV2"
+    )
+
+
+@bot.message_handler(commands=["html"])
+def set_markdownV2(message: types.Message):
+    bot.send_message(
+        chat_id=message.chat.id,
+        text=content.html,
+        parse_mode="HTML"
     )
 
 
