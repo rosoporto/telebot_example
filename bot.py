@@ -210,6 +210,15 @@ def heandle_weather_request(message: types.Message):
     )
 
 
+@bot.message_handler(commands=["md"])
+def set_markdownV2(message: types.Message):
+    bot.send_message(
+        chat_id=message.chat.id,
+        text=content.MarkdownV2,
+        parse_mode="MarkdownV2"
+    )
+
+
 # copying message as is (italic, bold, ...)
 @bot.message_handler(contains_word="проверка")
 def copy_incoming_gmessage(message: types.Message):
