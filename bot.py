@@ -1,5 +1,4 @@
 import os
-import random
 import content
 import my_filter
 from dotenv import load_dotenv
@@ -10,6 +9,9 @@ from get_joke_frop_api import get_joke_single, get_joke_twopart
 
 load_dotenv()
 tg_api = os.getenv('TG_API')
+if tg_api is None:
+    raise ValueError("Переменная окружения TG_API не установлена. Пожалуйста, установите её перед запуском.")
+
 bot = TeleBot(tg_api)
 bot.add_custom_filter(custom_filters.TextMatchFilter())
 bot.add_custom_filter(custom_filters.ForwardFilter())
@@ -123,7 +125,7 @@ def set_photo_from_disk_as_doc_id(message: types.Message):
     photo_file_id = content.PICS_CAT_ID
     bot.send_document(
         chat_id=message.chat.id,
-        document=photo_file_id,
+        document=photo_file_id,        
         caption="Картинка как документ по ссылке"
     )
 
@@ -181,9 +183,18 @@ def handle_caption_photo(message: types.Message):
         caption="Мне эти нравятся)"
     )
 
+@bot.message_handler(commands=["location"])
+def set_location(message: types.Message):
+    bot.send_location(
+        chat_id=message.chat.id,
+        latitude=55.754047,
+        longitude=37.620406,
+        reply_to_message_id=message.id
+    )
 
-@bot.message_handler(content_types=["photo"])
-def handle_foto(message: types.Message):
+
+@bot.message_handler(content_types=["photo"], is_reply=False)
+def handle_photo(message: types.Message):
     bot.send_message(
         chat_id=message.chat.id,
         text="👍",
